@@ -6,6 +6,10 @@ import Tema from '../../../models/Tema';
 import useLocalStorage from 'react-use-localstorage';
 import { busca, buscaId, post, put } from '../../../services/Service';
 import Postagens from '../../../models/Postagem';
+import User from '../../../models/User';
+import CadastroUsuario from '../../../paginas/cadastroUsuario/CadastroUsuario';
+import { TokenState } from '../../../store/tokens/tokensReducer';
+import { useSelector } from 'react-redux';
 
 function CadastroPostagem() {
     let navigate = useNavigate();
@@ -13,6 +17,11 @@ function CadastroPostagem() {
     const [temas, setTemas] = useState<Tema[]>([])
     const [token, setToken] = useLocalStorage('token');
 
+    const userId = useSelector<TokenState, TokenState['id']>(
+        (state) => state.id
+      )
+   
+   
     useEffect(() => {
         if (token == "") {
             alert("Você precisa estar logado")
@@ -31,14 +40,24 @@ function CadastroPostagem() {
         titulo: '',
         texto: '',
         data: '',
-        tema: null
+        tema: null,
+        usuario: null
     })
+
+    const [usuario, setUsuario] = useState<User>({
+        id: +userId,
+        nome:'',
+        usuario: '',
+        senha: '',
+        foto: ''
+      })
 
     useEffect(() => { 
         setPostagem({
             ...postagens,
-            tema: tema
-        })
+            tema: tema,
+            usuario:usuario
+        });
     }, [tema])
 
     useEffect(() => {

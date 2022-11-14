@@ -8,7 +8,6 @@ import useLocalStorage from 'react-use-localstorage';
 import { useNavigate } from 'react-router-dom'
 import { Box } from '@mui/material';
 
-
 function ListaPostagem() {
   const [posts, setPosts] = useState<Postagem[]>([])
   const [token, setToken] = useLocalStorage('token');
@@ -54,9 +53,12 @@ function ListaPostagem() {
                 </Typography>
                 <Typography variant="body2" component="p">
                   {post.tema?.descricao}
-                </Typography>
-              </CardContent>
-              <CardActions>
+                </Typography>  
+                <Typography variant="body2" component="p">
+              Postado por: {post.usuario?.nome}
+            </Typography>
+          </CardContent>
+        
                 <Box display="flex" justifyContent="center" mb={1.5}>
 
                   <Link to={`/formularioPostagem/${post.id}`} className="text-decorator-none" >
@@ -66,7 +68,7 @@ function ListaPostagem() {
                       </Button>
                     </Box>
                   </Link>
-                  <Link to={`/deletarPostagem/${post.id}`} className="text-decorator-none">
+                  <Link to={`/deletarPostagens/${post.id}`} className="text-decorator-none">
                     <Box mx={1}>
                       <Button variant="contained" size='small' color="secondary">
                         deletar
@@ -74,7 +76,6 @@ function ListaPostagem() {
                     </Box>
                   </Link>
                 </Box>
-              </CardActions>
             </Card>
           </Box>
         ))
