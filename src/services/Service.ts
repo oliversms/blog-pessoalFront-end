@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 export const api = axios.create({
-    baseURL: 'https://blogpessoal-6yvr.onrender.com'
+    //baseURL: 'https://blogpessoal-6yvr.onrender.com'
+    baseURL: 'http://127.0.0.1:8080'
 })
 
 export const cadastroUsuario = async(url:any,dados:any,setDado:any) => {

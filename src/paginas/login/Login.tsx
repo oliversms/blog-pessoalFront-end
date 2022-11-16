@@ -5,8 +5,9 @@ import { login } from '../../services/Service';
 import UserLogin from '../../models/UserLogin';
 import './Login.css';
 import { useDispatch } from 'react-redux';
-import { addToken } from "../../store/tokens/actions";
+import { addId, addToken } from "../../store/tokens/actions";
 import { Box } from '@mui/material';
+import { toast } from 'react-toastify';
 
 function Login() {
     let navigate = useNavigate();
@@ -20,11 +21,18 @@ function Login() {
             senha: '',
             foto:'' ,
             token: ''
-        }
-        )
+        });
+
+        const [respUserLogin, setRespUserLogin] = useState<UserLogin>({
+            id: 0,
+            nome: '',
+            usuario: '',
+            senha: '',
+            foto: '',
+            token: '',
+          });
 
         function updatedModel(e: ChangeEvent<HTMLInputElement>) {
-
             setUserLogin({
                 ...userLogin,
                 [e.target.name]: e.target.value
@@ -38,17 +46,34 @@ function Login() {
                 }
             }, [token])
 
-        async function onSubmit(e: ChangeEvent<HTMLFormElement>){
-            e.preventDefault();
+            useEffect(() => {
+                if (respUserLogin.token !== '') {
+                  dispatch(addToken(respUserLogin.token))
+                  dispatch(addId(respUserLogin.id.toString()))
+                  navigate('/home')
+                }
+              }, [respUserLogin.token])
+
+              async function onSubmit (event: ChangeEvent<HTMLFormElement>) {
+                event.preventDefault();
             try{
-                await login(`/usuario/logar`, userLogin, setToken)
+                await login('/usuario/logar', userLogin, setRespUserLogin);
+                toast.info('Usuário logado com sucesso', {
+                    theme: 'colored',
+                    autoClose: 2000,
+                    hideProgressBar: true
+                })
 
-                alert('Usuário logado com sucesso!');
-            }catch(error){
-                alert('Dados do usuário inconsistentes. Erro ao logar!');
+            } catch (error) {
+               toast.error('error, tente novamente.', {
+                theme: 'colored',
+                autoClose: 2000,
+                hideProgressBar: true
+               })
             }
-        }
 
+        }
+            
     return (
         <Grid container direction='row' justifyContent='center' alignItems='center'>
             <Grid alignItems='center' xs={6}>
